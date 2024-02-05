@@ -32,13 +32,12 @@ jobs:
             latest
             my-totally-real-repo.io/thisbuild:${{ github.sha }}
 
-    # TODO: this is where you'd make an EKS cluster if you wanted to, etc.    
-
-    deploy:
-        name: Deploy to k8s
-        needs: build
-        runs-on: ubuntu-latest
-        steps:
+    # TODO: this is where you'd make an EKS cluster if you wanted to, etc.
+  deploy:
+    name: Deploy to k8s
+    needs: build
+    runs-on: ubuntu-latest
+    steps:
             # makes sure kubectl is present, a particular version, etc.
             - uses: azure/setup-kubectl@v2.0
 
