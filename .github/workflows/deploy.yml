@@ -27,5 +27,36 @@ jobs:
         with:
           # b/c nowhere to push it
           push: false
-          # this actually depends on your repo
-          tags: latest
+          # also not real yet
+          tags: |
+            latest
+            my-totally-real-repo.io/thisbuild:${{ github.sha }}
+
+    # TODO: this is where you'd make an EKS cluster if you wanted to, etc.    
+
+    deploy:
+        name: Deploy to k8s
+        needs: build
+        runs-on: ubuntu-latest
+        steps:
+            # makes sure kubectl is present, a particular version, etc.
+            - uses: azure/setup-kubectl@v2.0
+
+            # configures kubectx so kubectl can run `kubectl apply`
+            - uses: Azure/aks-set-context@v1
+              with:
+                creds: ${{ secrets.MY_SECRET_CREDS}}
+                cluster-name: mh
+                resource-group: mh
+
+            # this GH Workflows action will do image sub on a static manifest
+            - uses: Azure/k8s-deploy@v4
+              with:
+                action: deploy
+                manifests: |
+                    manifests/deployment.yml
+                    manifests/service.yml
+                images: |
+                    my-totally-real-repo.io/thisbuild:${{ github.sha }}
+
+        # TODO: a step to wait for the deployment to be healthy, print logs, whatever
