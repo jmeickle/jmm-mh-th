@@ -1,0 +1,31 @@
+name: Build and deploy repo
+
+# TODO: it's nice to also have this be triggerable manually
+on: push
+
+jobs:
+
+  test:
+    name: Test code
+    runs-on: ubuntu-latest
+    steps:
+        - name: no-op
+          run: echo "no tests yet!"
+
+  build:
+    name: Build container
+    needs: test
+    runs-on: ubuntu-latest
+    steps:
+      - name: set up Docker
+        uses: docker/setup-buildx-action@v1
+
+        # missing step: remote docker repo authentication
+
+      - name: Build and push the Docker image
+        uses: docker/build-push-action@v3
+        with:
+          # b/c nowhere to push it
+          push: false
+          # this actually depends on your repo
+          tags: latest
