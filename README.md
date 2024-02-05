@@ -1,5 +1,10 @@
 # jmm-mh-th
 
+## Recommended
+
+- Github Actions (VSCode Extension)
+- Docker (VSCode Extension)
+
 ## Setup
 1. Install poetry
 ```
